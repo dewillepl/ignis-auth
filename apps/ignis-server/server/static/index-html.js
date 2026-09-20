@@ -11,7 +11,7 @@ function scriptJson(value) {
   return JSON.stringify(value).replace(/</g, "\\u003c");
 }
 
-function buildIndexHtml() {
+function buildIndexHtml({ authEnabled = false } = {}) {
   if (cachedHtml) {
     return cachedHtml;
   }
@@ -48,6 +48,13 @@ function buildIndexHtml() {
   html = html.replace(
     "__OBSIDIAN_SCRIPTS__",
     JSON.stringify(scripts.map((s) => versionedSrc(s, obsidianVersion))),
+  );
+
+  html = html.replace(
+    "__AUTH_SCRIPT__",
+    authEnabled
+      ? `<script type="text/javascript" src="assets/auth-client.js?v=${version}"></script>`
+      : "",
   );
 
   cachedHtml = html;

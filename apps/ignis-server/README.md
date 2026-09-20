@@ -10,4 +10,7 @@ Setup, configuration, and operations documentation is at **[ignis.thiefling.com/
 - [Remote access](https://ignis.thiefling.com/docs/security/remote-access/) and [Authentication](https://ignis.thiefling.com/docs/security/authentication/)
 - [Settings](https://ignis.thiefling.com/docs/using/settings/) and [Hardening](https://ignis.thiefling.com/docs/security/hardening/)
 
+This fork adds a built-in login gate in [`server/auth/`](server/auth/) - see
+[docs/AUTHENTICATION.md](../../docs/AUTHENTICATION.md).
+
 To build the image from source, run `docker compose up` against the [`docker-compose.yml`](docker-compose.yml) in this directory.

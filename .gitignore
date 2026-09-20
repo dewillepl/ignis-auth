@@ -5,3 +5,4 @@ vaults/
 packages/*/dist/
 apps/ignis-server/server/build-info.json
 data/
+.env

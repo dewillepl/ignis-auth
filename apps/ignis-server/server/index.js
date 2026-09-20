@@ -24,6 +24,7 @@ const {
 } = require("./plugin-system/manager");
 const obCli = require("./obsidian-account/ob-cli");
 const pluginRoutes = require("./routes/plugins");
+const { setupAuth, wireAuthWebSocket } = require("./auth");
 const { flushAll } = writeCoalescer;
 
 writeCoalescer.configure({ writeCoalesceMs: settings.get("writeCoalesceMs") });
@@ -97,6 +98,10 @@ const { createMetadataChannel } = require("./cache/metadata-channel");
 const { registerCacheListeners } = require("./cache/listeners");
 const vaultLifecycle = require("./vault/lifecycle");
 
+// Login gate. Mounted before every route and static mount below, so an unauthenticated
+// request reaches nothing but the login page. No-op when auth is not configured.
+const auth = setupAuth(app);
+
 app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 app.use("/api/fs", fsRoutes);
@@ -156,7 +161,7 @@ app.use("/vault-files", (req, res, next) => {
 app.get(["/", "/index.html"], (req, res) => {
   res.set("Content-Type", "text/html; charset=utf-8");
   res.set("Cache-Control", "no-cache");
-  res.send(buildIndexHtml());
+  res.send(buildIndexHtml({ authEnabled: !!auth }));
 });
 
 app.get("/favicon.png", (req, res) => {
@@ -210,6 +215,9 @@ const wss = setupWebSocket(server, {
   originAllowlist: settings.get("wsOrigins"),
 });
 vaultLifecycle.setWss(wss);
+
+// Wrapped last so the auth check runs first on an upgrade.
+wireAuthWebSocket(server, auth);
 
 const metadataChannel = createMetadataChannel(wss);
 
