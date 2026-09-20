@@ -18,6 +18,7 @@ import { initInsecureApiNotice } from "./insecure-api-notice.js";
 import { initProxyBlockNotice } from "./proxy-block-notice.js";
 import { initWriteGiveupNotice } from "./write-giveup-notice.js";
 import { initImageRetry } from "./image-retry.js";
+import { initLogoutButton } from "./logout-button.js";
 
 class IgnisBridgePlugin extends Plugin {
   async onload() {
@@ -38,6 +39,7 @@ class IgnisBridgePlugin extends Plugin {
     this._proxyBlockUnsub = initProxyBlockNotice(this.app);
     this._writeGiveupUnsub = initWriteGiveupNotice();
     this._imageRetryUnsub = initImageRetry();
+    this._logoutButtonUnsub = initLogoutButton(this);
 
     this.addRibbonIcon("upload", "Upload file", () => {
       showFilePicker(this.app);
@@ -93,6 +95,10 @@ class IgnisBridgePlugin extends Plugin {
 
     if (this._imageRetryUnsub) {
       this._imageRetryUnsub();
+    }
+
+    if (this._logoutButtonUnsub) {
+      this._logoutButtonUnsub();
     }
 
     unpatchSettingsModal(this);

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Sign in - Ignis</title>
+  <link rel="icon" type="image/png" href="/favicon.png"/>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #1b1b1b;
+      --card: #262626;
+      --border: #363636;
+      --text: #dadada;
+      --muted: #8f8f8f;
+      --accent: #a882ff;
+      --danger: #e05252;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .card {
+      width: 100%;
+      max-width: 340px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 26px 24px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+    }
+    .brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+    .brand img { width: 56px; height: 56px; }
+    .brand h1 { margin: 0; font-size: 17px; font-weight: 600; letter-spacing: 0.2px; }
+    .brand p { margin: 0; font-size: 12px; color: var(--muted); }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 9px 11px;
+      margin-bottom: 14px;
+      background: #1e1e1e;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 14px;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(168, 130, 255, 0.18);
+    }
+    button {
+      width: 100%;
+      margin-top: 4px;
+      padding: 10px;
+      background: var(--accent);
+      border: none;
+      border-radius: 6px;
+      color: #1b1b1b;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover { filter: brightness(1.07); }
+    .error {
+      margin-bottom: 16px;
+      padding: 9px 11px;
+      border: 1px solid rgba(224, 82, 82, 0.4);
+      border-radius: 6px;
+      background: rgba(224, 82, 82, 0.12);
+      color: var(--danger);
+      font-size: 13px;
+    }
+    .foot {
+      margin: 18px 0 0;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand">
+      <img src="/favicon.png" alt=""/>
+      <h1>Ignis</h1>
+      <p>Sign in to open your vault</p>
+    </div>
+    __ERROR__
+    <form method="POST" action="/login" autocomplete="on">
+      <input type="hidden" name="next" value="__NEXT__"/>
+      <label for="username">Username</label>
+      <input id="username" name="username" type="text" autocomplete="username"
+             value="__USERNAME__" autocapitalize="none" autocorrect="off" spellcheck="false" required autofocus/>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required/>
+      <button type="submit">Sign in</button>
+    </form>
+    <p class="foot">Ignis &middot; self-hosted Obsidian</p>
+  </main>
+</body>
+</html>

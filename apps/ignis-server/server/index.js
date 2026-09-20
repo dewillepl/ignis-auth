@@ -25,6 +25,7 @@ const pluginRoutes = require("./routes/plugins");
 writeCoalescer.configure({ writeCoalesceMs: settings.get("writeCoalesceMs") });
 const { flushAll } = writeCoalescer;
 const { setupDemo, wireDemoWebSocket } = require("./demo");
+const { setupAuth, wireAuthWebSocket } = require("./auth");
 
 const REPO_ROOT = path.join(__dirname, "..", "..", "..");
 
@@ -83,6 +84,10 @@ const versionRoutes = require("./routes/version");
 const settingsRoutes = require("./routes/settings");
 const bootstrapRoutes = require("./routes/bootstrap");
 const vaultLifecycle = require("./vault-lifecycle");
+
+// Login gate. Mounted before every route and static mount below, so an unauthenticated
+// request reaches nothing but the login page. No-op when auth is not configured.
+const auth = setupAuth(app);
 
 app.use("/assets", express.static(path.join(__dirname, "assets")));
 
@@ -194,6 +199,13 @@ function buildIndexHtml() {
     );
   }
 
+  html = html.replace(
+    "__AUTH_SCRIPT__",
+    auth
+      ? `<script type="text/javascript" src="assets/auth-client.js?v=${version}"></script>`
+      : "",
+  );
+
   cachedHtml = html;
   return cachedHtml;
 }
@@ -254,6 +266,9 @@ const wss = setupWebSocket(server, {
 });
 vaultLifecycle.setWss(wss);
 wireDemoWebSocket(server);
+
+// Wrapped last so the auth check runs first on an upgrade.
+wireAuthWebSocket(server, auth);
 
 // Invalidate stored tree on any file change.
 watcher.addGlobalListener((vaultId) =>
