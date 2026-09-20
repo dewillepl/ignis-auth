@@ -11,7 +11,7 @@ function scriptJson(value) {
   return JSON.stringify(value).replace(/</g, "\\u003c");
 }
 
-function buildIndexHtml() {
+function buildIndexHtml({ authEnabled = false } = {}) {
   if (cachedHtml) {
     return cachedHtml;
   }
@@ -56,6 +56,13 @@ function buildIndexHtml() {
       '<body class="theme-dark" data-demo-mode="true">',
     );
   }
+
+  html = html.replace(
+    "__AUTH_SCRIPT__",
+    authEnabled
+      ? `<script type="text/javascript" src="assets/auth-client.js?v=${version}"></script>`
+      : "",
+  );
 
   cachedHtml = html;
   return cachedHtml;

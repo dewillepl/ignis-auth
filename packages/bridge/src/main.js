@@ -21,6 +21,7 @@ import { initProxyBlockNotice } from "./proxy-block-notice.js";
 import { initWriteGiveupNotice } from "./write-giveup-notice.js";
 import { initImageRetry } from "./image-retry.js";
 import { installReadingLock } from "./reading-lock.js";
+import { initLogoutButton } from "./logout-button.js";
 
 class IgnisBridgePlugin extends Plugin {
   async onload() {
@@ -42,6 +43,7 @@ class IgnisBridgePlugin extends Plugin {
     this._insecureApiUnsub = initInsecureApiNotice();
     this._proxyBlockUnsub = initProxyBlockNotice(this.app);
     this._imageRetryUnsub = initImageRetry();
+    this._logoutButtonUnsub = initLogoutButton(this);
 
     const flags = window.__ignis.flags || {};
 
@@ -105,6 +107,10 @@ class IgnisBridgePlugin extends Plugin {
 
     if (this._pluginTogglesUnsub) {
       this._pluginTogglesUnsub();
+    }
+
+    if (this._logoutButtonUnsub) {
+      this._logoutButtonUnsub();
     }
 
     unpatchSettingsModal(this);

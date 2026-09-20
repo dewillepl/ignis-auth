@@ -11,6 +11,7 @@
     "build": "node build.js",
     "dev:server": "node apps/ignis-server/server/index.js",
     "dev": "npm run build && npm run dev:server",
+    "auth:hash": "node apps/ignis-server/scripts/hash-password.js",
     "docker:build": "node apps/ignis-server/scripts/build-image.js",
     "lint": "oxlint packages apps/ignis-server/server --max-warnings 0 && node scripts/check-error-leaks.mjs",
     "test": "vitest run",
@@ -19,6 +20,7 @@
   "dependencies": {
     "acorn": "^8.18.0",
     "archiver": "^7.0.1",
+    "bcryptjs": "^3.0.3",
     "chokidar": "^3.6.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",

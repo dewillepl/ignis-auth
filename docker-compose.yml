@@ -1,0 +1,29 @@
+services:
+  ignis:
+    image: ignis:local
+    container_name: ignis
+    # Lokalny build ze zrodel w tym repo: docker-compose build
+    build:
+      context: .
+      dockerfile: apps/ignis-server/Dockerfile
+    ports:
+      - "8081:8080"
+    # Dane logowania (AUTH_USERNAME / AUTH_PASSWORD_HASH) - patrz .env.example.
+    # env_file przekazuje wartosci doslownie, wiec podwojone "$$" w hashu docieraja
+    # do serwera nienaruszone; modul auth je normalizuje.
+    env_file:
+      - .env
+    environment:
+      - OBSIDIAN_VERSION=1.12.7
+      # UID/GID hosta (kuba: 504:20), zeby pliki w vaulcie nie zmienialy wlasciciela
+      - PUID=504
+      - PGID=20
+    volumes:
+      # VAULT_ROOT to katalog *zawierajacy* vaulty, wiec vault montujemy jako podkatalog
+      - /Users/kuba/IginisVault:/vaults/IginisVault
+      - ./data:/app/data
+      - obsidian-app:/app/obsidian-app
+    restart: unless-stopped
+
+volumes:
+  obsidian-app:
